@@ -37,7 +37,7 @@ export default function Page() {
           ingredients: extractIngredients(mealData),
         });
       } catch (error) {
-        console.error("Error fetching meal data:", error);
+        console.error("Error", error);
       }
     };
 

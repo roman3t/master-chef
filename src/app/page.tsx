@@ -6,6 +6,7 @@ import CategoriesMenu from "./components/CategoriesMenu";
 import MealsList from "./components/MealList";
 import ButtonRandom from "./components/ButtonRandom";
 import SearchList from "./components/SearchList";
+import { fetchSearch } from "./api/fetchSearch";
 
 type Meal = {
   idMeal: string;
@@ -21,18 +22,14 @@ export default function Home() {
 
   const handleSearch = async (query: string) => {
     try {
-      const response = await fetch(
-        `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`
-      );
-      const data = await response.json();
-      setSearchResults(data.meals || []);
+      const response = await fetchSearch(query);
+      setSearchResults(response || []);
       setIsSearching(true);
-      setSelectedCategory("")
+      setSelectedCategory("");
     } catch (error) {
       console.error("error", error);
     }
   };
-
 
   return (
     <div className="mt-20">
@@ -40,10 +37,10 @@ export default function Home() {
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-8">Select a category</h1>
         <CategoriesMenu onSelectCategory={setSelectedCategory} />
-        {selectedCategory && (
-          <MealsList category={selectedCategory} />
+        {selectedCategory && <MealsList category={selectedCategory} />}
+        {isSearching && !selectedCategory && (
+          <SearchList mealSearch={searchResults} />
         )}
-        {isSearching && !selectedCategory && <SearchList mealSearch={searchResults} />}
       </div>
       <ButtonRandom fixed />
     </div>
