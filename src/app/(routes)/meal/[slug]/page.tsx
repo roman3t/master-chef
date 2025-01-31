@@ -60,7 +60,6 @@ export default function Page() {
 
   return (
     <div className="max-w-5xl flex flex-col mx-auto">
-      
       <MealHeader meal={meal} />
       <MealIngredients ingredients={meal.ingredients} />
       <MealInstructions instructions={meal.strInstructions} />

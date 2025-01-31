@@ -5,20 +5,47 @@ import { useState } from "react";
 import CategoriesMenu from "./components/CategoriesMenu";
 import MealsList from "./components/MealList";
 import ButtonRandom from "./components/ButtonRandom";
+import SearchList from "./components/SearchList";
+
+type Meal = {
+  idMeal: string;
+  strMeal: string;
+  strMealThumb: string;
+  strInstructions: string;
+};
 
 export default function Home() {
-
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<Meal[]>([]);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  const handleSearch = async (query: string) => {
+    try {
+      const response = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`
+      );
+      const data = await response.json();
+      setSearchResults(data.meals || []);
+      setIsSearching(true);
+      setSelectedCategory("")
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
 
   return (
     <div className="mt-20">
-      <SearchBar />
+      <SearchBar onSearch={handleSearch} />
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-8">Select a category</h1>
         <CategoriesMenu onSelectCategory={setSelectedCategory} />
-        {selectedCategory && <MealsList category={selectedCategory} />}
+        {selectedCategory && (
+          <MealsList category={selectedCategory} />
+        )}
+        {isSearching && !selectedCategory && <SearchList mealSearch={searchResults} />}
       </div>
-      <ButtonRandom fixed/>
+      <ButtonRandom fixed />
     </div>
   );
 }

@@ -9,13 +9,11 @@ type Category = {
 }
 
 export default function CategoriesMenu({
-  onSelectCategory,
+  onSelectCategory, 
 }: {
   onSelectCategory: (category: string) => void;
 }) {
   const [categories, setCategories] = useState<Category[]>([]);
-
-  const [selected, setSelected] = useState("");
 
   useEffect(() => {
     const getCategories = async () => {

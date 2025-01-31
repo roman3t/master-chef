@@ -1,7 +1,7 @@
-export const fetchMeal = async (slug: string) => {
+export const fetchSearch = async (query: string) => {
   const response = await fetch(
-    `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${slug}`
+    `https://www.themealdb.com/api/json/v1/1/search.php?i=${query}`
   );
   const data = await response.json();
-  return data.meals[0];
+  return data.meals;
 };
